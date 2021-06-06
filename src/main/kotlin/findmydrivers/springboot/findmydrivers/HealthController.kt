@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.RestController
 
 
 @RestController
-@RequestMapping("locations")
-class LocationRouterController {
-    @GetMapping("springboot")
-    fun helloWorld(): String = "Hello this is Location"
+@RequestMapping("/health")
+class HealthController {
+    @GetMapping
+    fun helloWorld(): String = "This api is working"
 }
 
