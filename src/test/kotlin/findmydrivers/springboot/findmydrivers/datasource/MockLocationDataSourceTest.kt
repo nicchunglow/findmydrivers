@@ -1,5 +1,6 @@
-package findmydrivers.springboot.findmydrivers.datasource.mock
+package findmydrivers.springboot.findmydrivers.datasource
 
+import findmydrivers.springboot.findmydrivers.datasource.mock.MockLocationDataSource
 import org.assertj.core.api.Assertions.*
 import org.junit.jupiter.api.Test
 

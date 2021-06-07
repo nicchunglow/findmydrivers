@@ -2,8 +2,6 @@ package findmydrivers.springboot.findmydrivers.service
 
 import findmydrivers.springboot.findmydrivers.datasource.LocationDataSource
 import io.mockk.*
-import io.mockk.MockKSettings.relaxed
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
 internal class LocationServiceTest {
