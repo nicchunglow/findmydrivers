@@ -1,16 +1,22 @@
 package findmydrivers.springboot.findmydrivers.datasource.mock
 
 import findmydrivers.springboot.findmydrivers.datasource.LocationDataSource
+import findmydrivers.springboot.findmydrivers.model.Coordinates
 import findmydrivers.springboot.findmydrivers.model.Location
 import org.springframework.stereotype.Repository
 import java.lang.IllegalArgumentException
 
 @Repository
 class MockLocationDataSource : LocationDataSource {
+    private val coordinates = listOf(
+        Coordinates(21, 23),
+        Coordinates(21, 23),
+        Coordinates(21, 23)
+    )
     val locations = mutableListOf(
-        Location(12, "test"),
-        Location(20, "test2"),
-        Location(30, "test3")
+        Location(coordinates[0], "test"),
+        Location(coordinates[1], "test2"),
+        Location(coordinates[2], "test3")
     )
 
     override fun getLocations(): Collection<Location> = locations

@@ -16,6 +16,6 @@ internal class MockLocationDataSourceTest {
     @Test
     fun `should provide some mock data`() {
         val locations = mockDataSource.getLocations()
-        assertThat(locations).allMatch { it.lng > 0 }
+        assertThat(locations).allMatch { it.coordinates.lng > 0 }
     }
 }

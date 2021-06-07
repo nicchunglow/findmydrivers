@@ -1,6 +1,7 @@
 package findmydrivers.springboot.findmydrivers.controller
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import findmydrivers.springboot.findmydrivers.model.Coordinates
 import findmydrivers.springboot.findmydrivers.model.Location
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.TestInstance.Lifecycle
@@ -8,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
-import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.web.servlet.*
 
 @SpringBootTest
@@ -31,7 +31,7 @@ internal class LocationControllerTest @Autowired constructor(
                 .andExpect {
                     status { isOk() }
                     content { contentType(MediaType.APPLICATION_JSON) }
-                    jsonPath("$[0].lng") { value(12) }
+                    jsonPath("$[0].coordinates.lng") { value(12) }
                 }
         }
     }
@@ -68,7 +68,8 @@ internal class LocationControllerTest @Autowired constructor(
     inner class PostLocation {
         @Test
         fun `should POST new location`() {
-            val newLocation = Location(152, "MyPlace")
+            val newCoordinates = Coordinates(21, 23)
+            val newLocation = Location(newCoordinates, "MyPlace")
             val performPost = mockMvc.post(baseUrl) {
                 contentType = MediaType.APPLICATION_JSON
                 content = objectMapper.writeValueAsString(newLocation)
@@ -84,7 +85,8 @@ internal class LocationControllerTest @Autowired constructor(
 
         @Test
         fun `should return BAD REQUEST if location with name already exist`() {
-            val invalidLocation = Location(12, "test")
+            val newCoordinates = Coordinates(21, 23)
+            val invalidLocation = Location(newCoordinates, "test")
             val performPost = mockMvc.post(baseUrl) {
                 contentType = MediaType.APPLICATION_JSON
                 content = objectMapper.writeValueAsString(invalidLocation)
