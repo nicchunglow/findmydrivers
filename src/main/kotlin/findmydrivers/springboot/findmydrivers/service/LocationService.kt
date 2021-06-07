@@ -9,4 +9,5 @@ class LocationService(private val dataSource: LocationDataSource) {
     fun getLocations(): Collection<Location> = dataSource.getLocations()
     fun getLocation(name: String): Location = dataSource.getLocation(name)
     fun postLocation(location: Location): Location = dataSource.postLocation(location)
+    fun deleteLocation(name: String) = dataSource.deleteLocation(name)
 }

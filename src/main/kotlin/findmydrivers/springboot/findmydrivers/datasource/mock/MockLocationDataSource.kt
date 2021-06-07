@@ -27,4 +27,11 @@ class MockLocationDataSource : LocationDataSource {
             return location
         }
     }
+
+    override fun deleteLocation(name: String) {
+        val currentLocation = locations.firstOrNull { it.name == name }
+            ?: throw NoSuchElementException("Could not find a bank with account number $name")
+
+        locations.remove(currentLocation)
+    }
 }

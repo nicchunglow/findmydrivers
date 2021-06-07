@@ -28,4 +28,8 @@ class LocationController(private val service: LocationService) {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     fun postLocation(@RequestBody location: Location): Location = service.postLocation(location)
+
+    @DeleteMapping("/{name}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun deleteLocation(@PathVariable name: String): Unit = service.deleteLocation(name)
 }

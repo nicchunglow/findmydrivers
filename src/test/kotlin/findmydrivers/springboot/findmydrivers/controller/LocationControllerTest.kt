@@ -3,10 +3,12 @@ package findmydrivers.springboot.findmydrivers.controller
 import com.fasterxml.jackson.databind.ObjectMapper
 import findmydrivers.springboot.findmydrivers.model.Location
 import org.junit.jupiter.api.*
+import org.junit.jupiter.api.TestInstance.Lifecycle
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
+import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.web.servlet.*
 
 @SpringBootTest
@@ -20,7 +22,7 @@ internal class LocationControllerTest @Autowired constructor(
 
     @Nested
     @DisplayName("GET /locations")
-    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+    @TestInstance(Lifecycle.PER_CLASS)
     inner class GetLocations {
         @Test
         fun `should rent all locations`() {
@@ -36,7 +38,7 @@ internal class LocationControllerTest @Autowired constructor(
 
     @Nested
     @DisplayName("GET /locations?name")
-    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+    @TestInstance(Lifecycle.PER_CLASS)
     inner class GetLocation {
         @Test
         fun `should return location with the given id`() {
@@ -62,7 +64,7 @@ internal class LocationControllerTest @Autowired constructor(
 
     @Nested
     @DisplayName("POST /locations")
-    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+    @TestInstance(Lifecycle.PER_CLASS)
     inner class PostLocation {
         @Test
         fun `should POST new location`() {
@@ -92,6 +94,34 @@ internal class LocationControllerTest @Autowired constructor(
                 .andExpect {
                     status { isBadRequest() }
                 }
+        }
+    }
+
+    @Nested
+    @DisplayName("DELETE /locations/{name}")
+    @TestInstance(Lifecycle.PER_CLASS)
+    inner class DeleteExistingLocation {
+        @Test
+        fun `should delete the location with the given name`() {
+            val name = "test"
+
+            mockMvc.delete("$baseUrl/$name")
+                .andDo { print() }
+                .andExpect {
+                    status { isNoContent() }
+                }
+
+            mockMvc.get("$baseUrl/$name")
+                .andExpect { status { isNotFound() } }
+        }
+
+        @Test
+        fun `should return NOT FOUND if no location with given name exists`() {
+            val invalidName = "does_not_exist"
+
+            mockMvc.delete("$baseUrl/$invalidName")
+                .andDo { print() }
+                .andExpect { status { isNotFound() } }
         }
     }
 }
