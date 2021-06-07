@@ -5,4 +5,5 @@ import findmydrivers.springboot.findmydrivers.model.Location
 interface LocationDataSource {
     fun getLocations(): Collection<Location>
     fun getLocation(name: String): Location
+    fun postLocation(location: Location): Location
 }

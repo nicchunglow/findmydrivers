@@ -1,5 +1,7 @@
 package findmydrivers.springboot.findmydrivers.controller
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import findmydrivers.springboot.findmydrivers.model.Location
 import org.junit.jupiter.api.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
@@ -9,10 +11,12 @@ import org.springframework.test.web.servlet.*
 
 @SpringBootTest
 @AutoConfigureMockMvc
-internal class LocationControllerTest {
+internal class LocationControllerTest @Autowired constructor(
+    var mockMvc: MockMvc,
+    var objectMapper: ObjectMapper
+) {
 
-    @Autowired
-    lateinit var mockMvc: MockMvc
+    val baseUrl = "/locations"
 
     @Nested
     @DisplayName("GET /locations")
@@ -20,7 +24,7 @@ internal class LocationControllerTest {
     inner class GetLocations {
         @Test
         fun `should rent all locations`() {
-            mockMvc.get("/locations")
+            mockMvc.get(baseUrl)
                 .andDo { print() }
                 .andExpect {
                     status { isOk() }
@@ -31,11 +35,9 @@ internal class LocationControllerTest {
     }
 
     @Nested
-    @DisplayName("/locations?name")
+    @DisplayName("GET /locations?name")
     @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     inner class GetLocation {
-        val baseUrl = "/locations"
-
         @Test
         fun `should return location with the given id`() {
             val name = "test"
@@ -55,6 +57,41 @@ internal class LocationControllerTest {
                 .andDo { print() }
                 .andExpect { status { isNotFound() } }
                 .andExpect { content { } }
+        }
+    }
+
+    @Nested
+    @DisplayName("POST /locations")
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+    inner class PostLocation {
+        @Test
+        fun `should POST new location`() {
+            val newLocation = Location(152, "MyPlace")
+            val performPost = mockMvc.post(baseUrl) {
+                contentType = MediaType.APPLICATION_JSON
+                content = objectMapper.writeValueAsString(newLocation)
+            }
+            performPost
+                .andDo { print() }
+                .andExpect {
+                    status { isCreated() }
+                    content { contentType(MediaType.APPLICATION_JSON) }
+                    jsonPath("$.name") { value("MyPlace") }
+                }
+        }
+
+        @Test
+        fun `should return BAD REQUEST if location with name already exist`() {
+            val invalidLocation = Location(12, "test")
+            val performPost = mockMvc.post(baseUrl) {
+                contentType = MediaType.APPLICATION_JSON
+                content = objectMapper.writeValueAsString(invalidLocation)
+            }
+            performPost
+                .andDo { print() }
+                .andExpect {
+                    status { isBadRequest() }
+                }
         }
     }
 }

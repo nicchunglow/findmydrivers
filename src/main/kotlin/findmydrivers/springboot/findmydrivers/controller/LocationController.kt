@@ -5,6 +5,7 @@ import findmydrivers.springboot.findmydrivers.service.LocationService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import java.lang.IllegalArgumentException
 
 @RestController
 @RequestMapping("/locations")
@@ -14,9 +15,17 @@ class LocationController(private val service: LocationService) {
     fun handleNotFound(e: NoSuchElementException): ResponseEntity<String> =
         ResponseEntity(e.message, HttpStatus.NOT_FOUND)
 
+    @ExceptionHandler(IllegalArgumentException::class)
+    fun handleBadRequest(e: IllegalArgumentException): ResponseEntity<String> =
+        ResponseEntity(e.message, HttpStatus.BAD_REQUEST)
+
     @GetMapping
-    fun getlocations(): Collection<Location> = service.getLocations()
+    fun getAllLocations(): Collection<Location> = service.getLocations()
 
     @GetMapping("/{name}")
-    fun getLocation(@PathVariable name: String) = service.getBank(name)
+    fun getLocation(@PathVariable name: String) = service.getLocation(name)
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    fun postLocation(@RequestBody location: Location): Location = service.postLocation(location)
 }

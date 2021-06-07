@@ -7,5 +7,6 @@ import org.springframework.stereotype.Service
 @Service
 class LocationService(private val dataSource: LocationDataSource) {
     fun getLocations(): Collection<Location> = dataSource.getLocations()
-    fun getBank(name: String): Location = dataSource.getLocation(name)
+    fun getLocation(name: String): Location = dataSource.getLocation(name)
+    fun postLocation(location: Location): Location = dataSource.postLocation(location)
 }
