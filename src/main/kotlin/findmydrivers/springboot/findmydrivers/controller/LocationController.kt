@@ -1,7 +1,7 @@
 package findmydrivers.springboot.findmydrivers.controller
 
 import findmydrivers.springboot.findmydrivers.model.Location
-import findmydrivers.springboot.findmydrivers.model.request.LocationRequest
+import findmydrivers.springboot.findmydrivers.request.LocationRequest
 import findmydrivers.springboot.findmydrivers.service.LocationService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity

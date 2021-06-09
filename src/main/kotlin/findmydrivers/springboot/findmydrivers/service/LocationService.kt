@@ -2,7 +2,7 @@ package findmydrivers.springboot.findmydrivers.service
 
 import findmydrivers.springboot.findmydrivers.repository.LocationRepository
 import findmydrivers.springboot.findmydrivers.model.Location
-import findmydrivers.springboot.findmydrivers.model.request.LocationRequest
+import findmydrivers.springboot.findmydrivers.request.LocationRequest
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 

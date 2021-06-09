@@ -1,4 +1,4 @@
-package findmydrivers.springboot.findmydrivers.model.request
+package findmydrivers.springboot.findmydrivers.request
 
 import findmydrivers.springboot.findmydrivers.model.Coordinates
 
