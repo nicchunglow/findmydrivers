@@ -19,7 +19,6 @@ internal class LocationControllerTest @Autowired constructor(
 ) {
 
     val baseUrl = "/locations"
-
     @Nested
     @DisplayName("GET /locations")
     @TestInstance(Lifecycle.PER_CLASS)
