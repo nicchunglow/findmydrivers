@@ -1,6 +1,7 @@
 package findmydrivers.springboot.findmydrivers.controller
 
 import findmydrivers.springboot.findmydrivers.model.Location
+import findmydrivers.springboot.findmydrivers.model.request.LocationRequest
 import findmydrivers.springboot.findmydrivers.service.LocationService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -27,7 +28,8 @@ class LocationController(private val service: LocationService) {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    fun postLocation(@RequestBody location: Location): Location = service.postLocation(location)
+    fun postLocation(@RequestBody request: LocationRequest): Location =
+        service.postLocation(LocationRequest(request.name, request.coordinates))
 
     @DeleteMapping("/{name}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

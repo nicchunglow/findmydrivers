@@ -4,12 +4,11 @@ import findmydrivers.springboot.findmydrivers.datasource.LocationDataSource
 import findmydrivers.springboot.findmydrivers.model.Coordinates
 import findmydrivers.springboot.findmydrivers.model.Location
 import org.springframework.stereotype.Repository
-import java.lang.IllegalArgumentException
 
 @Repository
 class MockLocationDataSource : LocationDataSource {
     private val coordinates = listOf(
-        Coordinates(21, 23),
+        Coordinates(12, 23),
         Coordinates(21, 23),
         Coordinates(21, 23)
     )
