@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/")
-class HealthController {
+class IndexController {
     @GetMapping
-    fun apiGuide() = """{
+    fun index() = """{
         0: "GET   /locations",
         1: "POST /locations/create",
         2: "DELETE /locations/:name",
