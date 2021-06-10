@@ -59,7 +59,7 @@ internal class LocationControllerTest @Autowired constructor(
     @TestInstance(Lifecycle.PER_CLASS)
     inner class GetLocations {
         @Test
-        fun `should rent all locations`() {
+        fun `should get all locations`() {
             whenever(service.getLocations()).thenReturn(locations)
             mockMvc.get(baseUrl)
                 .andDo { print() }
@@ -78,6 +78,7 @@ internal class LocationControllerTest @Autowired constructor(
         @Test
         fun `should return location with the given id`() {
             val name = "test"
+            whenever(service.getLocation(name)).thenReturn(locations[0])
             mockMvc.get("$baseUrl/$name")
                 .andDo { print() }
                 .andExpect {
@@ -90,6 +91,7 @@ internal class LocationControllerTest @Autowired constructor(
         @Test
         fun `should return status 404 if name not found`() {
             val name = "fake_name"
+            whenever(service.getLocation(name)).thenThrow(NoSuchElementException())
             mockMvc.get("$baseUrl/$name")
                 .andDo { print() }
                 .andExpect { status { isNotFound() } }
