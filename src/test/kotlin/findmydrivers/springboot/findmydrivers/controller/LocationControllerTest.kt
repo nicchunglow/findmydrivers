@@ -3,28 +3,64 @@ package findmydrivers.springboot.findmydrivers.controller
 import com.fasterxml.jackson.databind.ObjectMapper
 import findmydrivers.springboot.findmydrivers.model.Coordinates
 import findmydrivers.springboot.findmydrivers.model.Location
+import findmydrivers.springboot.findmydrivers.service.LocationService
+import io.mockk.clearAllMocks
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.TestInstance.Lifecycle
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.whenever
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.context.TestConfiguration
+import org.springframework.context.annotation.Bean
 import org.springframework.http.MediaType
-import org.springframework.test.web.servlet.*
+import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.delete
+import org.springframework.test.web.servlet.get
+import org.springframework.test.web.servlet.post
+
 
 @SpringBootTest
 @AutoConfigureMockMvc
 internal class LocationControllerTest @Autowired constructor(
     var mockMvc: MockMvc,
-    var objectMapper: ObjectMapper
+    var objectMapper: ObjectMapper,
 ) {
+    private val coordinates = listOf(
+        Coordinates(12, 23),
+        Coordinates(23, 23),
+        Coordinates(45, 23)
+    )
+    val locations = mutableListOf(
+        Location(coordinates[0], "test"),
+        Location(coordinates[1], "test2"),
+        Location(coordinates[2], "test3")
+    )
+
+    @TestConfiguration
+    class ControllerTestConfig {
+        @Bean
+        fun service() = mock<LocationService>()
+    }
+
+    @Autowired
+    private lateinit var service: LocationService
+
+    @BeforeEach
+    internal fun setUpMocks() {
+        clearAllMocks()
+    }
 
     val baseUrl = "/locations"
+
     @Nested
     @DisplayName("GET /locations")
     @TestInstance(Lifecycle.PER_CLASS)
     inner class GetLocations {
         @Test
         fun `should rent all locations`() {
+            whenever(service.getLocations()).thenReturn(locations)
             mockMvc.get(baseUrl)
                 .andDo { print() }
                 .andExpect {

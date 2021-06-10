@@ -1,10 +1,12 @@
 package findmydrivers.springboot.findmydrivers.service
 
 import findmydrivers.springboot.findmydrivers.repository.LocationRepository
-import io.mockk.*
+import io.mockk.mockk
+import io.mockk.verify
 import org.junit.jupiter.api.Test
 
 internal class LocationServiceTest {
+
     private val locationRepository: LocationRepository = mockk(relaxed = true)
     private val locationService = LocationService(locationRepository)
 
