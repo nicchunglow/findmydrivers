@@ -28,8 +28,13 @@ class LocationController(private val service: LocationService) {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    fun postLocation(@RequestBody request: LocationRequest): Location =
-        service.postLocation(LocationRequest(request.name, request.coordinates))
+    fun postLocation(@RequestBody request: LocationRequest): Location {
+        if (request.name.isEmpty()) {
+            throw IllegalArgumentException("Please fill in all details")
+        } else {
+            return service.postLocation(LocationRequest(request.name, request.coordinates))
+        }
+    }
 
     @DeleteMapping("/{name}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
