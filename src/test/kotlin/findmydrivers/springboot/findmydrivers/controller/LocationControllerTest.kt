@@ -9,6 +9,7 @@ import io.mockk.clearAllMocks
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.TestInstance.Lifecycle
 import org.mockito.MockitoAnnotations
+import org.mockito.kotlin.any
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 import org.springframework.beans.factory.annotation.Autowired
@@ -130,7 +131,7 @@ internal class LocationControllerTest @Autowired constructor(
         fun `should return BAD REQUEST if location with name field is empty`() {
             val newCoordinates = Coordinates(21, 23)
             val invalidLocation = Location(newCoordinates, "test")
-            whenever(service.deleteLocation("")).thenThrow(NoSuchElementException())
+            whenever(service.postLocation(any())).thenThrow(NoSuchElementException())
             mockMvc.post(baseUrl) {
                 contentType = MediaType.APPLICATION_JSON
                 content = objectMapper.writeValueAsString(invalidLocation)
@@ -148,7 +149,6 @@ internal class LocationControllerTest @Autowired constructor(
         @Test
         fun `should delete the location with the given name`() {
             val name = "test"
-
             mockMvc.delete("$baseUrl/$name")
                 .andDo { print() }
                 .andExpect {
@@ -162,7 +162,7 @@ internal class LocationControllerTest @Autowired constructor(
         @Test
         fun `should return NOT FOUND if no location with given name exists`() {
             val invalidName = "does_not_exist"
-
+            whenever(service.deleteLocation(invalidName)).thenThrow(NoSuchElementException())
             mockMvc.delete("$baseUrl/$invalidName")
                 .andDo { print() }
                 .andExpect { status { isNotFound() } }
