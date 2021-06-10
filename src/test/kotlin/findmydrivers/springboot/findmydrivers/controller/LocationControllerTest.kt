@@ -3,10 +3,12 @@ package findmydrivers.springboot.findmydrivers.controller
 import com.fasterxml.jackson.databind.ObjectMapper
 import findmydrivers.springboot.findmydrivers.model.Coordinates
 import findmydrivers.springboot.findmydrivers.model.Location
+import findmydrivers.springboot.findmydrivers.repository.LocationRepository
 import findmydrivers.springboot.findmydrivers.service.LocationService
 import io.mockk.clearAllMocks
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.TestInstance.Lifecycle
+import org.mockito.MockitoAnnotations
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 import org.springframework.beans.factory.annotation.Autowired
@@ -42,6 +44,9 @@ internal class LocationControllerTest @Autowired constructor(
     class ControllerTestConfig {
         @Bean
         fun service() = mock<LocationService>()
+
+        @Bean
+        fun repository() = mock<LocationRepository>()
     }
 
     @Autowired
@@ -50,6 +55,7 @@ internal class LocationControllerTest @Autowired constructor(
     @BeforeEach
     internal fun setUpMocks() {
         clearAllMocks()
+        MockitoAnnotations.openMocks(this)
     }
 
     val baseUrl = "/locations"
@@ -121,15 +127,14 @@ internal class LocationControllerTest @Autowired constructor(
         }
 
         @Test
-        fun `should return BAD REQUEST if location with name already exist`() {
+        fun `should return BAD REQUEST if location with name field is empty`() {
             val newCoordinates = Coordinates(21, 23)
             val invalidLocation = Location(newCoordinates, "test")
-            val performPost = mockMvc.post(baseUrl) {
+            whenever(service.deleteLocation("")).thenThrow(NoSuchElementException())
+            mockMvc.post(baseUrl) {
                 contentType = MediaType.APPLICATION_JSON
                 content = objectMapper.writeValueAsString(invalidLocation)
-            }
-            performPost
-                .andDo { print() }
+            }.andDo { print() }
                 .andExpect {
                     status { isBadRequest() }
                 }
