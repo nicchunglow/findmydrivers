@@ -6,8 +6,8 @@ import org.springframework.boot.test.context.SpringBootTest
 @SpringBootTest
 class FindMyDriversApplicationTests {
 
-	@Test
-	fun contextLoads() {
-	}
+    @Test
+    fun contextLoads() {
+    }
 
 }
