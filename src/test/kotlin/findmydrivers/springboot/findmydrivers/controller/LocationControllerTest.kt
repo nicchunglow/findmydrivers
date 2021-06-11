@@ -107,14 +107,14 @@ internal class LocationControllerTest @Autowired constructor(
     }
 
     @Nested
-    @DisplayName("POST /locations")
+    @DisplayName("POST /locations/create")
     @TestInstance(Lifecycle.PER_CLASS)
     inner class PostLocation {
         @Test
         fun `should POST new location`() {
             val newCoordinates = Coordinates(21, 23)
             val newLocation = Location(newCoordinates, "MyPlace")
-            val performPost = mockMvc.post(baseUrl) {
+            val performPost = mockMvc.post("$baseUrl/create") {
                 contentType = MediaType.APPLICATION_JSON
                 content = objectMapper.writeValueAsString(newLocation)
             }
@@ -132,7 +132,7 @@ internal class LocationControllerTest @Autowired constructor(
             val newCoordinates = Coordinates(21, 23)
             val invalidLocation = Location(newCoordinates, "test")
             whenever(service.postLocation(any())).thenThrow(NoSuchElementException())
-            mockMvc.post(baseUrl) {
+            mockMvc.post("$baseUrl/create") {
                 contentType = MediaType.APPLICATION_JSON
                 content = objectMapper.writeValueAsString(invalidLocation)
             }.andDo { print() }

@@ -2,7 +2,6 @@ package findmydrivers.springboot.findmydrivers.model
 
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.index.Indexed
-import org.springframework.data.mongodb.core.mapping.Field
 import org.springframework.data.mongodb.core.mapping.Document
 
 @Document("location")
@@ -15,6 +14,6 @@ data class Location(
 
 @Document
 data class Coordinates(
-    val lng: Int,
-    val lat: Int
+    val lng: Number,
+    val lat: Number
 )

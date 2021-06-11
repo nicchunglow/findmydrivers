@@ -6,7 +6,6 @@ import findmydrivers.springboot.findmydrivers.service.LocationService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import java.lang.IllegalArgumentException
 
 @RestController
 @RequestMapping("/locations")
@@ -26,7 +25,7 @@ class LocationController(private val service: LocationService) {
     @GetMapping("/{name}")
     fun getLocation(@PathVariable name: String) = service.getLocation(name)
 
-    @PostMapping
+    @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
     fun postLocation(@RequestBody request: LocationRequest): Location {
         if (request.name.isEmpty()) {
@@ -36,6 +35,7 @@ class LocationController(private val service: LocationService) {
         }
     }
 
+    @CrossOrigin
     @DeleteMapping("/{name}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun deleteLocation(@PathVariable name: String): Unit = service.deleteLocation(name)
